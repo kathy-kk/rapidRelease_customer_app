@@ -1,0 +1,31 @@
+
+service: customer_api 
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${file(./config/envVars.js):getEnvVars.NODE_ENV}
+  region: us-east-1
+
+environment:
+  NODE_ENV: ${file(./config/envVars.js):getEnvVars.NODE_ENV}
+  DB: ${file(./config/envVars.js):getEnvVars.DB}
+
+
+functions:
+  app:
+    handler: server.run
+    events:
+      - http:
+         path: /
+         method: ANY
+         cors: true
+      - http:
+         path: /{proxy+}
+         method: ANY
+         cors: true
+
+
+
+plugins:
+- serverless-offline
