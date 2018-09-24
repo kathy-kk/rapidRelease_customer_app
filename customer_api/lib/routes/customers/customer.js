@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const helpers = require('../../utils/helpers');
 const moment = require('moment');
-const ValidationError = require('../../error/validationError')
+const ValidationError = require('../../error/validationError');
 const validateCustomerField = helpers.validateCustomerField;
 
 
@@ -34,7 +34,8 @@ const Customer = () => {
     }
 
     async function getAll () {
-
+        const customers = await CustomerModel.find();
+        return customers
     }
     return {
         create,

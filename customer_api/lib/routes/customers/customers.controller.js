@@ -21,26 +21,15 @@ customerController
     }
   })
 
-customerController
+  customerController
   .get('/', async (req, res, next) => {
     try{
-        const customer = await Customer.find()
-        res.status(200).send(customer)
+        const customers = await Customer.getAll();
+        res.status(200).send(customers);
     }catch(err){
-        console.info(err);
+        console.log(err);
+        res.status(500).send({error:'Something is wrong on the server'})
     }
-  })
-
-customerController
-  .get('/:id', async (req, res, next) => {
-    const customer = await Customer.findById(req.params.id)
-    res.status(200).send(customer)
-  })
-
-customerController
-  .delete('/:id', async (req, res, next) => {
-    const customer = await Customer.deleteOne({ _id: req.params.id })
-    res.status(200).send(customer)
   })
 
 module.exports = customerController
