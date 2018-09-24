@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const validator = require('validator');
 
 const getValidateSchema = () => {
     return  {
@@ -9,6 +10,10 @@ const getValidateSchema = () => {
     };
 };
 
+function validateEmail(email) {
+    return validator.isEmail(email)
+}
+
 const validateCustomerField = (field) => {
     const result = Joi.validate(field, getValidateSchema());
     return result;
@@ -16,4 +21,5 @@ const validateCustomerField = (field) => {
 
 module.exports = {
    validateCustomerField,
+   validateEmail
 }

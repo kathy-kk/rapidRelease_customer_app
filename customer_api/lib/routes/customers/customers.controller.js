@@ -12,12 +12,12 @@ customerController
     const phone = payloadData.phone;
     try{
         const customer =  await Customer.create(name, date_of_birth, email, phone);
-        res.status(200).send({customer:customer})
+        res.status(200).send({customer})
     }catch(err){
         if(err instanceof ValidationError)
             res.status(400).send({error:err.message});
         else 
-            res.status(500).send({error:'Something is wrong on the server'})
+            res.status(500).send({error: err.message||'Something is wrong on the server'})
     }
   })
 
@@ -27,9 +27,23 @@ customerController
         const customers = await Customer.getAll();
         res.status(200).send(customers);
     }catch(err){
-        console.log(err);
-        res.status(500).send({error:'Something is wrong on the server'})
+        if(err instanceof ValidationError)
+            res.status(400).send({error:err.message});
+        else res.status(500).send({error: err.message||'Something is wrong on the server'})
     }
+  })
+
+  customerController
+  .delete('/', async (req, res, next) => {
+      try{
+        const emailId = req.body.email
+        const customer = await Customer.deleteCustomer(emailId);
+        res.status(200).send({customer});
+      }catch(err){
+        if(err instanceof ValidationError)
+            res.status(400).send({error:err.message});
+        else res.status(500).send({error: err.message||'Something is wrong on the server'})
+      }
   })
 
 module.exports = customerController

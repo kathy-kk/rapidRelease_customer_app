@@ -3,7 +3,7 @@ const helpers = require('../../utils/helpers');
 const moment = require('moment');
 const ValidationError = require('../../error/validationError');
 const validateCustomerField = helpers.validateCustomerField;
-
+const validateEmail = helpers.validateEmail;
 
 const Customer = () => {
 
@@ -33,13 +33,26 @@ const Customer = () => {
         return await CustomerModel.find({email})
     }
 
+    async function deleteCustomer (email) {
+        if(validateEmail(email)===false) 
+            throw new ValidationError('invalid emailid')
+        const customer = await CustomerModel.find({email})
+        if(customer.length === 0) throw new ValidationError('Customer not exist')
+             const response = await CustomerModel.deleteOne({email});
+        if(response.ok)
+            return customer
+        else throw new Error('Fail to delete')
+    }
+
     async function getAll () {
         const customers = await CustomerModel.find();
         return customers
     }
+
     return {
+        deleteCustomer,
         create,
-        getAll
+        getAll,
     }
 }
 
