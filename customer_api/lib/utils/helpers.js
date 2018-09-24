@@ -2,7 +2,7 @@ const Joi = require('joi');
 const validator = require('validator');
 
 const getValidateSchema = () => {
-    return  {
+    return {
         name: Joi.string().regex(/^[a-zA-Z ]+$/).trim().min(2).required(),
         email: Joi.string().email().required(),
         date_of_birth: Joi.date().max('1-1-2018').iso(),
@@ -10,16 +10,16 @@ const getValidateSchema = () => {
     };
 };
 
-function validateEmail(email) {
-    return validator.isEmail(email)
+function validateEmail (email) {
+    return validator.isEmail(email);
 }
 
 const validateCustomerField = (field) => {
     const result = Joi.validate(field, getValidateSchema());
     return result;
-}
+};
 
 module.exports = {
-   validateCustomerField,
-   validateEmail
-}
+    validateCustomerField,
+    validateEmail
+};

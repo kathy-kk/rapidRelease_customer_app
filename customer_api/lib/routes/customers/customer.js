@@ -21,15 +21,20 @@ const Customer = () => {
             if(count !== 0) throw new ValidationError('duplicate email')   
     }
 
-    async function create (name, date_of_birth, email, phone) {
+    async function getValidatedCustomer(name, date_of_birth, email, phone) {
         const formatedDate = new Date(date_of_birth);
         if(moment(date_of_birth).isValid() === false) 
             throw new ValidationError('invalid date of birth');
         const error = validateCustomerField({name, email, date_of_birth: formatedDate, phone}).error;
         if(error) 
             throw new ValidationError(error.message);
-        await duplicateValidate(email);        
-        await CustomerModel.create({name, email, date_of_birth, phone});  
+        await duplicateValidate(email);  
+        return {name, email, date_of_birth, phone}
+    }
+
+    async function create (name, date_of_birth, email, phone) {
+        const validatedCustomer = await getValidatedCustomer(name, date_of_birth, email, phone)
+        await CustomerModel.create(validatedCustomer);  
         return await CustomerModel.find({email})
     }
 
@@ -38,10 +43,20 @@ const Customer = () => {
             throw new ValidationError('invalid emailid')
         const customer = await CustomerModel.find({email})
         if(customer.length === 0) throw new ValidationError('Customer not exist')
-             const response = await CustomerModel.deleteOne({email});
+              const response = await CustomerModel.deleteOne({email});
         if(response.ok)
             return customer
         else throw new Error('Fail to delete')
+    }
+
+    async function findAndUpdateCustomer(id, customer){
+        const email = customer.email;
+        const date_of_birth = customer.date_of_birth;
+        const name = customer.name;
+        const phone = customer.phone;
+        const validatedCustomer = await getValidatedCustomer(name, date_of_birth, email, phone);
+        const modifiedCustomer =  CustomerModel.findByIdAndUpdate(id,validatedCustomer,{new: true});
+        return modifiedCustomer;
     }
 
     async function getAll () {
@@ -50,6 +65,7 @@ const Customer = () => {
     }
 
     return {
+        findAndUpdateCustomer,
         deleteCustomer,
         create,
         getAll,

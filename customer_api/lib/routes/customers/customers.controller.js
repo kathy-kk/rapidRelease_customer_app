@@ -20,6 +20,24 @@ customerController
             res.status(500).send({error: err.message||'Something is wrong on the server'})
     }
   })
+  
+  customerController
+  .put('/id', async (req, res, next) => {
+    try{
+        const id = req.query.id;
+        const customer = req.body.customer;
+        if(customer){
+            const modifiedCustomer =  await Customer.findAndUpdateCustomer(id, customer);
+        res.status(200).send({customer: modifiedCustomer})
+        }else{
+            throw new ValidationError('customer is empty');
+        }
+    }catch(err){
+        if(err instanceof ValidationError)
+        res.status(400).send({error:err.message});
+    else res.status(500).send({error: err.message||'Something is wrong on the server'})
+    }
+  })
 
   customerController
   .get('/', async (req, res, next) => {
