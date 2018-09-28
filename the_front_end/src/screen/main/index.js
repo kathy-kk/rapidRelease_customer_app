@@ -1,6 +1,9 @@
 import React from 'react';
 import CustomerList from './containers/CustomerList';
 import { Grid, Col, Row, Panel } from 'react-bootstrap';
+import CustomerControl from './containers/CustomerControl';
+import CustomerView from './containers/CustomerView';
+import CustomerForm from './containers/CustomerForm';
 import '../../root.css';
 
 const customersArray = [
@@ -26,8 +29,8 @@ class MainScreen extends React.Component{
                 </Col>
                 <Col xs={6} md={8}>
                     <Panel>
-                        <Panel.Heading>Heading</Panel.Heading>
-                        <Panel.Body>Body</Panel.Body>
+                        <Panel.Heading><CustomerControl /></Panel.Heading>
+                        <Panel.Body><CustomerForm /></Panel.Body>
                     </Panel>
                 </Col>   
             </Row>
