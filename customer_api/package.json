@@ -7,7 +7,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "serverless offline --skipCacheInvalidation"
+    "start": "npx serverless offline --skipCacheInvalidation"
   },
   "keywords": [],
   "author": "",

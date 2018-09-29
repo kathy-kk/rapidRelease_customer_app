@@ -5,14 +5,16 @@ import { FaUser } from 'react-icons/fa';
 
 import DeleteButton from './deleteButton';
 
-const ListItem = ({name, customerId, deleteCustomer}) => (
-    <div className = {styles.container} key = {customerId}>
-        <div className = {styles.iconContainer}><FaUser /></div>
-        <div className = {styles.nameContainer}><h3>{name}</h3></div>
-        <div className = {styles.buttonContainer}>
-            <DeleteButton onClick = {deleteCustomer}/>
+const ListItem = ({name, deleteCustomer}) => (
+    <li   className = 'list-group-item'>
+        <div className = {styles.container} >
+            <div className = {styles.iconContainer}><FaUser /></div>
+            <div className = {styles.nameContainer}><h3>{name}</h3></div>
+            <div className = {styles.buttonContainer}>
+                <DeleteButton onClick = {deleteCustomer}/>
+            </div>
         </div>
-    </div>
+    </li>
 );
 
 // ListItem.propTypes = {

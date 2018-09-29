@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
-// import appReducer from './store/properties/reducer';
+ import customerApp from './store/Customer/reducer';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
@@ -9,7 +9,7 @@ const configureStore = () => {
     if(process.env.NODE_ENV !== 'production'){
         middlewares.push(createLogger);
     }
-    return createStore(() => null, applyMiddleware(...middlewares));
+    return createStore(customerApp, applyMiddleware(...middlewares));
 };
 
 export default configureStore();

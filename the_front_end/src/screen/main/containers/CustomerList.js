@@ -9,12 +9,13 @@ class CustomerList extends React.Component{
         const { customersArray } = this.props;
         return <ListGroup  componentClass = 'ul'>
             {  customersArray.map(customer => 
-                <li key = {customer.customerId} className = 'list-group-item'> <ListItem  name = {customer.name} customerId = {customer.customerId}/></li>)}
+                <ListItem key = {customer.customer_id} name = {customer.name} customerId = {customer.customerId}/>
+            )}
         </ListGroup>;
     }
 }
 
-// CustomerList.PropTypes = {
-//     customerArray: PropTypes.array.isRequired
-// };
+CustomerList.propTypes = {
+    customersArray: PropTypes.array.isRequired
+};
 export default CustomerList;
