@@ -37,9 +37,9 @@ export const fetchCustomers = () => {
 //     };
 // };
 
-// export const showCustomerDetail = customerId => (
-//     {
-//         type: SHOW_CUSTOMER_DETAIL,
-//         id: customerId
-//     }
-// );
+export const showCustomerDetail = customerId => dispatch => 
+    dispatch({
+        type: SHOW_CUSTOMER_DETAIL,
+        id: customerId
+    })
+;

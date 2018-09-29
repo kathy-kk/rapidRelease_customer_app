@@ -5,8 +5,8 @@ import { FaUser } from 'react-icons/fa';
 
 import DeleteButton from './deleteButton';
 
-const ListItem = ({name, deleteCustomer}) => (
-    <li   className = 'list-group-item'>
+const ListItem = ({name, deleteCustomer, customerId , itemOnclick}) => (
+    <li onClick = { () => itemOnclick(customerId) }  className = 'list-group-item'>
         <div className = {styles.container} >
             <div className = {styles.iconContainer}><FaUser /></div>
             <div className = {styles.nameContainer}><h3>{name}</h3></div>
