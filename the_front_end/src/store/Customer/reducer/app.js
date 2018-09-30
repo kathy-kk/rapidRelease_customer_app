@@ -1,4 +1,4 @@
-import { SHOW_CUSTOMER_DETAIL, TOGGLE_EDIT, ADD_CUSTOMER, RESET_SELECTED_CUSTOMER, FAIL_TO_ADD, VALIDATION_SUCCESS } from '../actionTypes';
+import { SHOW_CUSTOMER_DETAIL, TOGGLE_EDIT, ADD_CUSTOMER, RESET_SELECTED_CUSTOMER, FAIL_TO_ADD, VALIDATION_SUCCESS, FAIL_TO_MODIFY } from '../actionTypes';
 import { combineReducers } from 'redux';
 import edit, * as fromEdit from './edit';
 
@@ -18,6 +18,8 @@ const validationError = (state = '', action) => {
     case VALIDATION_SUCCESS:
         return '';
     case FAIL_TO_ADD:
+        return action.errorMessage;
+    case FAIL_TO_MODIFY:
         return action.errorMessage;
     default:
         return state;

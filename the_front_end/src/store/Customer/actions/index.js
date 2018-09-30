@@ -1,6 +1,6 @@
 import customerService from '../../../service';
 import { getEdit ,getSelectedCustomer } from '../reducer/';
-import { REMOVE_CUSTOMER, SHOW_CUSTOMER_DETAIL, FETCH_CUSTOMERS_REQUEST, FETCH_CUSTOMERS_SUCCESS, FETCH_CUSTOMERS_FAILURE, ADD_CUSTOMER, TOGGLE_EDIT, RESET_SELECTED_CUSTOMER, FAIL_TO_ADD, VALIDATION_SUCCESS } from '../actionTypes';
+import { REMOVE_CUSTOMER, SHOW_CUSTOMER_DETAIL, FETCH_CUSTOMERS_REQUEST, FETCH_CUSTOMERS_SUCCESS, FETCH_CUSTOMERS_FAILURE, ADD_CUSTOMER, TOGGLE_EDIT, RESET_SELECTED_CUSTOMER, FAIL_TO_ADD, VALIDATION_SUCCESS, FAIL_TO_MODIFY, MODIFY_CUSTOMER } from '../actionTypes';
 
 export const fetchCustomers = () => {
     return async dispatch => {
@@ -23,6 +23,7 @@ export const fetchCustomers = () => {
     };
 };
 
+
 export const failToAddCustomer = (errorMessage) => (dispatch) => {
     dispatch({
         type: FAIL_TO_ADD,
@@ -30,7 +31,50 @@ export const failToAddCustomer = (errorMessage) => (dispatch) => {
     });
 };
 
+export const failToModifyCustomer = (errorMessage) => (dispatch) => {
+    dispatch({
+        type: FAIL_TO_MODIFY,
+        errorMessage
+    });
+};
+
+export const modifyCustomer = (customer_id, name, date_of_birth, email, phone) => {
+    return async dispatch => {
+        dispatch({type: VALIDATION_SUCCESS});
+        try{
+            const id = customer_id;
+            const customer = {name, date_of_birth, email, phone};
+            const response = await customerService.modifyCustomer(id, customer);
+            dispatch({
+                type: MODIFY_CUSTOMER,
+                customer: response.customer
+            });
+
+            dispatch({
+                type: SHOW_CUSTOMER_DETAIL,
+                id: response.customer.customer_id
+            });
+        }catch(error){
+            console.log(error);
+            if( error.message == 'duplicate email')
+                dispatch({
+                    type: FAIL_TO_MODIFY,
+                    errorMessage: 'email already exists.'
+                });
+            else{
+                dispatch({
+                    type: FAIL_TO_MODIFY,
+                    errorMessage: 'Fail to modify customer.'
+                }); 
+            }
+        }
+    };
+};
+
 export const editExistingCustomer = () => (dispatch, getState) => {
+    dispatch({
+        type: VALIDATION_SUCCESS
+    });
     const selectedCustomer = getSelectedCustomer(getState());
     const edit = getEdit(getState());
     if(selectedCustomer!==null && !edit)
@@ -41,6 +85,9 @@ export const editExistingCustomer = () => (dispatch, getState) => {
 }; 
 
 export const editNewCustomer = () => dispatch => {
+    dispatch({
+        type: VALIDATION_SUCCESS
+    });
     dispatch({
         type: RESET_SELECTED_CUSTOMER
     });
@@ -71,6 +118,12 @@ export const addCustomer = (name, date_of_birth, email, phone) => {
                     type: FAIL_TO_ADD,
                     errorMessage: 'Customer already exists.'
                 });
+            else{
+                dispatch({
+                    type: FAIL_TO_ADD,
+                    errorMessage: 'Fail to add customer.'
+                }); 
+            }
         }
     };
 };

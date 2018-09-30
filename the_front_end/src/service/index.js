@@ -16,6 +16,26 @@ const customerService = () => {
         return data;
     }
 
+    async function modifyCustomer (id, customer) {
+        const url = `${API_END_POINT}customers/id/`;
+        const params = new URLSearchParams({id});
+        const response = await fetch(`${url}?${params}`,{
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({customer}),
+            method: 'PUT'
+        });
+
+        if(!response.ok){
+            const error = await response.json();
+            if(error.error) throw new Error(error.error);
+            throw new Error(`modify customer failed, HTTP status ${ response.status }`);
+        }
+        const data = await response.json();
+        return data;
+    }
+
     async function addCustomer (name , date_of_birth, email, phone) {
         const newCustomer = {
             name,
@@ -42,7 +62,8 @@ const customerService = () => {
     }
     return {
         fetchCustomers,
-        addCustomer
+        addCustomer,
+        modifyCustomer
     };
 
 };

@@ -31,36 +31,55 @@ class MainScreen extends React.Component{
             const email = selectedCustomer.email;
             const phone = selectedCustomer.phone;
             if(!edit) return <CustomerView name={name}  date_of_birth = {date_of_birth} email = {email} phone={phone}/>;
-            else return <CustomerForm handleOnChange = {this.handleOnChange}/>;
+            else return <CustomerForm  editCustomer={selectedCustomer}  handleOnChange = {this.handleOnChange}/>;
         }else{
-            if(edit) return <CustomerForm handleOnChange = {this.handleOnChange}/>;
+            if(edit) return <CustomerForm editCustomer={selectedCustomer}  handleOnChange = {this.handleOnChange}/>;
             else return  <div></div>;
         }   
     }
+    
+
     handleSave(){
-        const error = validateCustomerField(this.state.form).error;
-        const { addCustomer, failToAddCustomer, add } = this.props;
-        if(error){
-            const errorMessage = parseJoiError(error.message);
-            if(add) failToAddCustomer(errorMessage);
-        }else{
-            try{
-                const name = this.state.form.name;
-                const email = this.state.form.email;
-                const phone = this.state.form.phone;
-                const date_of_birth = this.state.form.date_of_birth;
-                if(add){
+        const { addCustomer ,failToAddCustomer, selectedCustomer, modifyCustomer, failToModifyCustomer } = this.props;
+        if(selectedCustomer==null){
+            const error = validateCustomerField(this.state.form).error;
+            if(error){
+                const errorMessage = parseJoiError(error.message);
+                failToAddCustomer(errorMessage);
+            }else{
+                try{
+                    const name = this.state.form.name;
+                    const email = this.state.form.email;
+                    const phone = this.state.form.phone;
+                    const date_of_birth = this.state.form.date_of_birth;
                     addCustomer(name, date_of_birth,email,phone);
+                }catch(err){
+                    console.log(err);
                 }
-            }catch(err){
-                console.log(err);
             }
+        }else{
+            const updatedCustomer = {...selectedCustomer, ...this.state.form};
+            const fields = { name: updatedCustomer.name, email: updatedCustomer.email, phone: updatedCustomer.phone, date_of_birth: updatedCustomer.date_of_birth };
+            const error = validateCustomerField(fields).error;
+            console.log(selectedCustomer);
+            console.log(fields);
+            if(error){
+                const errorMessage = parseJoiError(error.message);
+                failToModifyCustomer(errorMessage);
+            }else{
+                try{
+                    modifyCustomer( selectedCustomer.customer_id,fields.name, fields.date_of_birth, fields.email, fields.phone);
+                }catch(err){
+                    console.log(err);
+                } 
+            }
+
         }
     }
-    handleOnChange(e){
-        const fieldName = e.target.id;
-        const fieldValue = e.target.value;
-        this.setState({form: {...this.state.form, [fieldName]: fieldValue} });
+ 
+    handleOnChange(form){
+        console.log(form);
+        this.setState({form});
     }
     render(){
         const { customersArray, edit, selectedCustomer } = this.props; 

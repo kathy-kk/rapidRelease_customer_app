@@ -2,17 +2,43 @@ import React from 'react';
 import { connect } from 'react-redux';
 //import FormItem from '../../../components/formItem';
 import {  FormGroup, FormControl, ControlLabel } from 'react-bootstrap'; 
-import { getSelectedCustomer, getCustomerById, getValidationError } from '../../../store/Customer/reducer';
+import {  getEditMode,getValidationError } from '../../../store/Customer/reducer';
 
 class CustomerForm  extends React.Component {
 
-    getFormItem( title, key ) {
-        const { handleOnChange, selectedCustomer } = this.props; 
-        const placeholder = selectedCustomer==null?title:selectedCustomer[key];
+    constructor(props){
+        super(props);
+        this.getFormItem = this.getFormItem.bind(this);
+        this.handleOnChange = this.handleOnChange.bind(this);
+        const editCustomer = this.props.editCustomer;
 
-        return <FormGroup key = {key}>
+        this.state = editCustomer?
+            {
+                name: editCustomer.name,
+                phone: editCustomer.phone,
+                date_of_birth: editCustomer.date_of_birth,
+                email:editCustomer.email
+            }
+            :{name:'no name'};
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.editCustomer == null){
+            this.setState({name: '', phone: '', email: '', date_of_birth: ''});
+        }
+    }
+    handleOnChange(e) {
+        e.preventDefault();
+        const fieldName = e.target.name;
+        const fieldValue = e.target.value;
+        this.setState( {[fieldName]: fieldValue},() => this.props.handleOnChange(this.state) );
+         
+    }
+    getFormItem( title, key ) {
+        const { editCustomer } = this.props; 
+        const placeholder = editCustomer==null?title:editCustomer[key];
+        return <FormGroup >
             <ControlLabel>{title}</ControlLabel>
-            <FormControl id = {key} onChange = {handleOnChange} type="text" placeholder={placeholder}></FormControl>
+            <FormControl value={this.state[key]}  name = {key} onChange = {this.handleOnChange} type="text" placeholder={placeholder} ></FormControl>
         </FormGroup>; 
     }
   
@@ -34,9 +60,9 @@ class CustomerForm  extends React.Component {
     }
 }
 const mapStateToProps = (state) => {
-    const selectedCustomer = getSelectedCustomer(state)?getCustomerById(getSelectedCustomer(state),state):null;
+    const editMode = getEditMode(state);
     return {
-        selectedCustomer,
+        isAdding: editMode.add,
         validationError: getValidationError(state)
     };
 };

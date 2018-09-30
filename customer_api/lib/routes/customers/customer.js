@@ -61,7 +61,7 @@ const Customer = () => {
         const customerToUpdate = await CustomerModel.find({ customer_id: customerId });
         if (customerToUpdate.length === 0) { throw new ValidationError('Customer not exist'); } else {
             if (customerToUpdate[0].email !== email) {
-                await duplicateValidate();
+                await duplicateValidate(email);
             }
             const validatedCustomer = await getValidatedCustomer(name, date_of_birth, email, phone);
             const modifiedCustomer = CustomerModel.findOneAndUpdate(customerId, validatedCustomer, { new: true });
