@@ -30,7 +30,7 @@ export const failToAddCustomer = (errorMessage) => (dispatch) => {
     });
 };
 
-export const modifyCustomer = () => (dispatch, getState) => {
+export const editExistingCustomer = () => (dispatch, getState) => {
     const selectedCustomer = getSelectedCustomer(getState());
     const edit = getEdit(getState());
     if(selectedCustomer!==null && !edit)

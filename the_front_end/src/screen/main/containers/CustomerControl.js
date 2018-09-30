@@ -10,10 +10,10 @@ import SaveButton from '../../../components/saveButton';
 
 class CustomerControl  extends React.Component {
     render(){
-        const { edit, editNewCustomer, handleSave, modifyCustomer } = this.props;
+        const { edit, editNewCustomer, handleSave, editExistingCustomer } = this.props;
         return <div>
             <ButtonGroup>
-                {edit?<SaveButton onClick = { handleSave }/> : <EditButton onClick= { modifyCustomer }/>}
+                {edit?<SaveButton onClick = { handleSave }/> : <EditButton onClick= { editExistingCustomer }/>}
                 <Button><FaTimes /></Button>
             </ButtonGroup>
             <Button onClick = { editNewCustomer }>Add New Customer</Button>
