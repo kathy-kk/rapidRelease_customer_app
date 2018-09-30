@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { FETCH_CUSTOMERS_SUCCESS, FETCH_CUSTOMERS_FAILURE, FETCH_CUSTOMERS_REQUEST } from '../actionTypes';
+import { FETCH_CUSTOMERS_SUCCESS, FETCH_CUSTOMERS_FAILURE, FETCH_CUSTOMERS_REQUEST, ADD_CUSTOMER } from '../actionTypes';
 
 const createList = () => {
     const createIdList = dataList => dataList.map(customer => customer.customer_id);
@@ -8,6 +8,8 @@ const createList = () => {
         switch(action.type){
         case FETCH_CUSTOMERS_SUCCESS:
             return createIdList(action.data);
+        case ADD_CUSTOMER:
+            return [...state, action.newCustomer.customer_id];
         default: return state;
         }
     };

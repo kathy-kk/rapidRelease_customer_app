@@ -1,21 +1,31 @@
-import { SHOW_CUSTOMER_DETAIL } from '../actionTypes';
+import { SHOW_CUSTOMER_DETAIL, TOGGLE_EDIT, ADD_CUSTOMER, RESET_SELECTED_CUSTOMER, FAIL_TO_ADD, VALIDATION_SUCCESS } from '../actionTypes';
+import { combineReducers } from 'redux';
+import edit, * as fromEdit from './edit';
 
-const initialState = {
-    selectedCustomer: null,
-    edit: false
-};
-const app = (state = initialState, action) => {
+const selectedCustomer = (state = null, action) => {
     switch (action.type) {
+    case RESET_SELECTED_CUSTOMER:
+        return null;
     case SHOW_CUSTOMER_DETAIL:
-        return {
-            ...state,
-            selectedCustomer: action.id
-        };
+        return action.id;
     default:
         return state;
     }
 };
-export default app;
+
+const validationError = (state = '', action) => {
+    switch (action.type) {
+    case VALIDATION_SUCCESS:
+        return '';
+    case FAIL_TO_ADD:
+        return action.errorMessage;
+    default:
+        return state;
+    }
+};
+export default combineReducers({selectedCustomer, edit, validationError});
 export const getSelectedCustomer = state => state.selectedCustomer;
-export const getEdit = state => state.edit;
+export const getEdit = state => fromEdit.getEdit(state.edit);
+export const getEditMode = state => fromEdit.getEditMode(state);
+export const getValidationError = state => state.validationError;
 

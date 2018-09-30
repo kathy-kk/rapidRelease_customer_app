@@ -17,6 +17,10 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/'
     },
+    node: {
+        dns: 'mock',
+        net: 'mock'
+        },
     module: {
         rules: [
             {

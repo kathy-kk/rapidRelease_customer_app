@@ -13,3 +13,5 @@ export const getCustomerById = (id,state) => fromById.getCustomerById(id, state.
 export const getIdList = state => fromList.getIdList(state.idList);
 export const getSelectedCustomer = state => fromApp.getSelectedCustomer(state.app);
 export const getEdit = state => fromApp.getEdit(state.app);
+export const getEditMode = state => state.app.edit;
+export const getValidationError = state => fromApp.getValidationError(state.app);

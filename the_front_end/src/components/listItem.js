@@ -5,8 +5,8 @@ import { FaUser } from 'react-icons/fa';
 
 import DeleteButton from './deleteButton';
 
-const ListItem = ({name, deleteCustomer, customerId , itemOnclick}) => (
-    <li onClick = { () => itemOnclick(customerId) }  className = 'list-group-item'>
+const ListItem = ({name, deleteCustomer, customerId , itemOnclick, highLight}) => {
+    return <li onClick = { () => itemOnclick(customerId) }  className = {`list-group-item ${highLight? styles.highLight:''}`}>
         <div className = {styles.container} >
             <div className = {styles.iconContainer}><FaUser /></div>
             <div className = {styles.nameContainer}><h3>{name}</h3></div>
@@ -15,7 +15,7 @@ const ListItem = ({name, deleteCustomer, customerId , itemOnclick}) => (
             </div>
         </div>
     </li>
-);
+};
 
 // ListItem.propTypes = {
 //     name: PropTypes.String.isRequired,
