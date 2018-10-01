@@ -9,6 +9,7 @@ const customerApp = combineReducers({
     app
 });
 export default customerApp;
+export const getIsLoading = state => fromList.getIsLoading(state.idList);
 export const getCustomerById = (id,state) => fromById.getCustomerById(id, state.byId);
 export const getIdList = state => fromList.getIdList(state.idList);
 export const getSelectedCustomer = state => fromApp.getSelectedCustomer(state.app);

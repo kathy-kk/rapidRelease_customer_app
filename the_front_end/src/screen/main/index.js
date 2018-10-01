@@ -86,7 +86,6 @@ class MainScreen extends React.Component{
     }
  
     handleOnChange(form){
-        console.log(form);
         this.setState({form});
     }
     render(){

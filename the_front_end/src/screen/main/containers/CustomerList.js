@@ -4,12 +4,13 @@ import ListItem from '../../../components/listItem';
 import { ListGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/Customer/actions';
-import { getSelectedCustomer } from '../../../store/Customer/reducer';
+import { getSelectedCustomer, getIsLoading } from '../../../store/Customer/reducer';
 
 
 class CustomerList extends React.Component{
     render() {
-        const { selectedCustomer, customersArray, showCustomerDetail, removeCustomer } = this.props;
+        const { selectedCustomer, customersArray, showCustomerDetail, removeCustomer, isLoading } = this.props;
+        if(isLoading) return <p>Is Loading...</p>
         return <ListGroup  componentClass = 'ul'>
             {  customersArray.map(customer => 
                 <ListItem key = {customer.customer_id} 
@@ -25,6 +26,7 @@ class CustomerList extends React.Component{
 }
 const mapStateToProps = (state) => {
     return {
+        isLoading: getIsLoading(state),
         selectedCustomer: getSelectedCustomer (state)
     };
 };

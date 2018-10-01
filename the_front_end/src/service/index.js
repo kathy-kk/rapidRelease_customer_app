@@ -1,4 +1,4 @@
-const API_END_POINT = 'http://127.0.0.1:3000/api/';
+const API_END_POINT =  process.env.API_END_POINT;
 
 const customerService = () => {
    

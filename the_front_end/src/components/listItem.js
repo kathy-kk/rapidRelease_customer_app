@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styles from './listItem.css';
 import { FaUser } from 'react-icons/fa';
 
@@ -25,12 +24,5 @@ const ListItem = ({name, deleteCustomer, customerId , itemOnclick, highLight}) =
         </div>
     </li>;
 };
-
-// ListItem.propTypes = {
-//     name: PropTypes.String.isRequired,
-//     customerId: PropTypes.String.isRequired,
-//     showDetail: PropTypes.func.isRequired,
-//     deleteCustomer: PropTypes.func.isRequired
-// };
 
 export default ListItem;
