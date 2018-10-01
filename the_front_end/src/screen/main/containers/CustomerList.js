@@ -9,13 +9,14 @@ import { getSelectedCustomer } from '../../../store/Customer/reducer';
 
 class CustomerList extends React.Component{
     render() {
-        const { selectedCustomer, customersArray, showCustomerDetail } = this.props;
+        const { selectedCustomer, customersArray, showCustomerDetail, removeCustomer } = this.props;
         return <ListGroup  componentClass = 'ul'>
             {  customersArray.map(customer => 
                 <ListItem key = {customer.customer_id} 
                     name = {customer.name} 
+                    deleteCustomer =  {removeCustomer}
                     customerId = {customer.customer_id}
-                    itemOnclick = {showCustomerDetail}  
+                    itemOnclick = {showCustomerDetail} 
                     highLight = { selectedCustomer?selectedCustomer == customer.customer_id : false}      
                 />
             )}

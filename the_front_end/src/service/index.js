@@ -36,6 +36,25 @@ const customerService = () => {
         return data;
     }
 
+    async function removeCustomer (email){
+        const response = await fetch(`${API_END_POINT}customers/`,{
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({email}),
+            method: 'DELETE'
+        });
+        if(!response.ok) {
+            const error = await response.json();
+            if(error.error) throw new Error(error.error);
+            throw new Error(
+                `delete customer failed, HTTP status ${ response.status }`
+            );
+        }
+        const data = await response.json();
+        return data;
+    }
+
     async function addCustomer (name , date_of_birth, email, phone) {
         const newCustomer = {
             name,
@@ -63,8 +82,10 @@ const customerService = () => {
     return {
         fetchCustomers,
         addCustomer,
-        modifyCustomer
+        modifyCustomer,
+        removeCustomer,
     };
 
 };
+
 export default customerService();

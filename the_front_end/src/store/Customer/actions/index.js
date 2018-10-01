@@ -1,5 +1,5 @@
 import customerService from '../../../service';
-import { getEdit ,getSelectedCustomer } from '../reducer/';
+import { getEdit ,getSelectedCustomer, getCustomerById } from '../reducer/';
 import { REMOVE_CUSTOMER, SHOW_CUSTOMER_DETAIL, FETCH_CUSTOMERS_REQUEST, FETCH_CUSTOMERS_SUCCESS, FETCH_CUSTOMERS_FAILURE, ADD_CUSTOMER, TOGGLE_EDIT, RESET_SELECTED_CUSTOMER, FAIL_TO_ADD, VALIDATION_SUCCESS, FAIL_TO_MODIFY, MODIFY_CUSTOMER } from '../actionTypes';
 
 export const fetchCustomers = () => {
@@ -128,19 +128,31 @@ export const addCustomer = (name, date_of_birth, email, phone) => {
     };
 };
 
-// export const removeCustomer = (email) => {
-//     return async dispatch => {
-//         try{
-//             const removedCustomer = await customerService.removeCustomer(email);
-//             dispatch({
-//                 type: REMOVE_CUSTOMER,
-//                 id: removedCustomer.customerId
-//             });
-//         }catch(error){
-//             console.log(error);
-//         }
-//     };
-// };
+export const removeCustomer = (customerId) => {
+    return async (dispatch, getState) => {
+        if(customerId){
+            const customer = getCustomerById(customerId, getState());
+            const email = customer.email;
+            try{
+            
+                const response = await customerService.removeCustomer(email);
+                const removedCustomer = response.customer[0]
+                dispatch({
+                    type: REMOVE_CUSTOMER,
+                    id: removedCustomer.customer_id
+                });
+            }catch(error){
+                console.log(error);
+            }
+        }
+        else{
+            dispatch({
+                type: TOGGLE_EDIT,
+                mode:'reset'
+            });
+        }
+    };
+};
 
 export const showCustomerDetail = customerId => dispatch => {
     dispatch({

@@ -19,6 +19,8 @@ class MainScreen extends React.Component{
         this.state = {
             form: {}
         };
+        this.modifyCustomer = this.modifyCustomer.bind(this);
+        this.addCustomer = this.addCustomer.bind(this);
     }
     componentDidMount(){
         const { fetchCustomers } = this.props;
@@ -37,43 +39,49 @@ class MainScreen extends React.Component{
             else return  <div></div>;
         }   
     }
-    
+ 
 
     handleSave(){
-        const { addCustomer ,failToAddCustomer, selectedCustomer, modifyCustomer, failToModifyCustomer } = this.props;
-        if(selectedCustomer==null){
-            const error = validateCustomerField(this.state.form).error;
-            if(error){
-                const errorMessage = parseJoiError(error.message);
-                failToAddCustomer(errorMessage);
-            }else{
-                try{
-                    const name = this.state.form.name;
-                    const email = this.state.form.email;
-                    const phone = this.state.form.phone;
-                    const date_of_birth = this.state.form.date_of_birth;
-                    addCustomer(name, date_of_birth,email,phone);
-                }catch(err){
-                    console.log(err);
-                }
-            }
+        const {  selectedCustomer} = this.props;
+        if(selectedCustomer){
+            this.modifyCustomer(selectedCustomer);
         }else{
-            const updatedCustomer = {...selectedCustomer, ...this.state.form};
-            const fields = { name: updatedCustomer.name, email: updatedCustomer.email, phone: updatedCustomer.phone, date_of_birth: updatedCustomer.date_of_birth };
-            const error = validateCustomerField(fields).error;
-            console.log(selectedCustomer);
-            console.log(fields);
-            if(error){
-                const errorMessage = parseJoiError(error.message);
-                failToModifyCustomer(errorMessage);
-            }else{
-                try{
-                    modifyCustomer( selectedCustomer.customer_id,fields.name, fields.date_of_birth, fields.email, fields.phone);
-                }catch(err){
-                    console.log(err);
-                } 
+            this.addCustomer();    
+        }
+    }
+    addCustomer(){
+        const error = validateCustomerField(this.state.form).error;
+        if(error){
+            const errorMessage = parseJoiError(error.message);
+            this.props.failToAddCustomer(errorMessage);
+        }else{
+            try{
+                const name = this.state.form.name;
+                const email = this.state.form.email;
+                const phone = this.state.form.phone;
+                const date_of_birth = this.state.form.date_of_birth;
+                this.props.addCustomer(name, date_of_birth,email,phone);
+            }catch(err){
+                console.log(err);
             }
+        }
+    }
 
+    modifyCustomer(selectedCustomer){
+
+        const updatedCustomer = {...selectedCustomer, ...this.state.form};
+        const fields = { name: updatedCustomer.name, email: updatedCustomer.email, phone: updatedCustomer.phone, date_of_birth: updatedCustomer.date_of_birth };
+        const error = validateCustomerField(fields).error;
+      
+        if(error){
+            const errorMessage = parseJoiError(error.message);
+            this.props.failToModifyCustomer(errorMessage);
+        }else{
+            try{
+                this.props.modifyCustomer( selectedCustomer.customer_id,fields.name, fields.date_of_birth, fields.email, fields.phone);
+            }catch(err){
+                console.log(err);
+            } 
         }
     }
  

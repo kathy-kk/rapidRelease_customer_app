@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-//import FormItem from '../../../components/formItem';
 import {  FormGroup, FormControl, ControlLabel } from 'react-bootstrap'; 
 import {  getEditMode,getValidationError } from '../../../store/Customer/reducer';
 
@@ -19,7 +18,7 @@ class CustomerForm  extends React.Component {
                 date_of_birth: editCustomer.date_of_birth,
                 email:editCustomer.email
             }
-            :{name:'no name'};
+            :{name: '', phone: '', email: '', date_of_birth: ''};
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.editCustomer == null){
@@ -41,6 +40,7 @@ class CustomerForm  extends React.Component {
             <FormControl value={this.state[key]}  name = {key} onChange = {this.handleOnChange} type="text" placeholder={placeholder} ></FormControl>
         </FormGroup>; 
     }
+
   
     render(){
         const { validationError } = this.props;
