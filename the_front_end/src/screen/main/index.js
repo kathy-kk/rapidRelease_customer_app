@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { getCustomerById, getIdList, getEdit, getSelectedCustomer, getEditMode } from '../../store/Customer/reducer';
 import '../../root.css';
 import * as actions from '../../store/Customer/actions/';
-import { validateCustomerField, parseJoiError } from '../../utils/helper';
+import { validateCustomerField, parseJoiError, formatStringToDate } from '../../utils/helper';
 
 
 class MainScreen extends React.Component{
@@ -60,7 +60,7 @@ class MainScreen extends React.Component{
                 const email = this.state.form.email;
                 const phone = this.state.form.phone;
                 const date_of_birth = this.state.form.date_of_birth;
-                this.props.addCustomer(name, date_of_birth,email,phone);
+                this.props.addCustomer(name, formatStringToDate(date_of_birth),email,phone);
             }catch(err){
                 console.log(err);
             }
@@ -78,7 +78,7 @@ class MainScreen extends React.Component{
             this.props.failToModifyCustomer(errorMessage);
         }else{
             try{
-                this.props.modifyCustomer( selectedCustomer.customer_id,fields.name, fields.date_of_birth, fields.email, fields.phone);
+                this.props.modifyCustomer( selectedCustomer.customer_id,fields.name, formatStringToDate(fields.date_of_birth), fields.email, fields.phone);
             }catch(err){
                 console.log(err);
             } 

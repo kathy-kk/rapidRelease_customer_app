@@ -1,9 +1,9 @@
 import { FETCH_CUSTOMERS_SUCCESS, ADD_CUSTOMER, MODIFY_CUSTOMER, REMOVE_CUSTOMER } from '../actionTypes';
-import { formatDatetoString } from '../../../utils/helper';
+import { formatUtcToString } from '../../../utils/helper';
 
 const createCustomersObj = dataList => dataList.reduce( (acc,customer) => {
     const customerId = customer.customer_id;
-    customer.date_of_birth = formatDatetoString(customer.date_of_birth);
+    customer.date_of_birth = formatUtcToString(customer.date_of_birth);
     acc[customerId] = customer;
     return acc;
 }, {});
@@ -15,7 +15,7 @@ const byId = (state = {},action) => {
         return createCustomersObj(action.data);
     case ADD_CUSTOMER:{
         const newCustomer = action.newCustomer;
-        newCustomer.date_of_birth = formatDatetoString(newCustomer.date_of_birth);
+        newCustomer.date_of_birth = formatUtcToString(newCustomer.date_of_birth);
         return {
             ...state,
             [newCustomer.customer_id]: newCustomer
@@ -30,7 +30,7 @@ const byId = (state = {},action) => {
     }
     case MODIFY_CUSTOMER:{
         const updatedCustomer = action.customer;
-        updatedCustomer.date_of_birth = formatDatetoString(updatedCustomer.date_of_birth);
+        updatedCustomer.date_of_birth = formatUtcToString(updatedCustomer.date_of_birth);
         return {
             ...state,
             [updatedCustomer.customer_id]: updatedCustomer

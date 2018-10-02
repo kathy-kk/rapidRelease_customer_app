@@ -11,12 +11,20 @@ const getValidateSchema = () => {
     };
 };
 
-export const formatDatetoString = (utc) => {
+//from utc to dd-mm-yyyy
+export const formatUtcToString = (utc) => {
     return  moment.utc(utc, 'YYYY-MM-DD HH:mm Z').format('DD-MM-YYYY');
 };
 
-export const formatDateToUtc = (dateString) => {
-    return new Date(dateString);
+//from dd-mm-yyyy to yyyy-mm-dd
+export const formatStringToDate = (dateString) => {
+    return dateString.split('-').reverse().join('-');
+};
+
+//from dd-mm-yyyy to utc
+export const formatStringToUtc = (dateString) => {
+    const [day, month, year] = dateString.split('-');
+    return new Date(year, month-1, day);
 };
 
 export const validateEmail = (email) => {
@@ -41,10 +49,12 @@ export const parseJoiError = (error) => {
 };
 
 export const validateCustomerField = (field) => {
+    console.log(field);
     const fieldCopy = { ...field };
     if(fieldCopy.date_of_birth){
-        fieldCopy.date_of_birth = formatDateToUtc(field.date_of_birth);
+        fieldCopy.date_of_birth = formatStringToUtc(field.date_of_birth);
     }
+    console.log(fieldCopy);
     const result = Joi.validate(fieldCopy, getValidateSchema());
     return result;
 };
